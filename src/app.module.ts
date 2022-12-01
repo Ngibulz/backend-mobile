@@ -1,12 +1,18 @@
+import { FacilitiesModule } from './facilities/facilities.module';
+import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
         type: 'mysql',
         host: 'localhost',
@@ -20,6 +26,8 @@ import { AppService } from './app.service';
         synchronize: true,
     }),
     UserModule,
+    AuthModule,
+    FacilitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
