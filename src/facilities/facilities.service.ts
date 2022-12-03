@@ -1,3 +1,7 @@
+import { uuid4 } from '@sentry/utils';
+import { BuidlingEnum } from './../role/building.enum';
+import { Role } from 'src/role/role.enum';
+import { FacilitiesCreateDto } from './dto/facilities-create.dto';
 import { Building } from './../entities/building.entity';
 import { User } from './../entities/user.entity';
 import { BadRequestException, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
@@ -5,7 +9,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Connection, Repository, DataSource, UpdateResult } from 'typeorm';
 import * as bc from 'bcrypt'
 import { Facilities } from 'src/entities/facilities.entity';
-
+import * as path from 'path';
+import { NotFoundException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class FacilitiesService {
@@ -48,6 +53,7 @@ export class FacilitiesService {
             "f.status",
             "f.description",
             "f.ticketNum",
+            "f.imgPath",
             "b.buildingId",
             "b.buildingName",
         ])
@@ -84,6 +90,7 @@ export class FacilitiesService {
             "f.status",
             "f.description",
             "f.ticketNum",
+            "f.imgPath"
         ])
         .where("b.buildingName = :names",{names:name})
         .getMany()
@@ -100,6 +107,7 @@ export class FacilitiesService {
             "f.status",
             "f.description",
             "f.ticketNum",
+            "f.imgPath",
         ])
         .where("f.facilitiesId =:fid",{fid:id})
         .andWhere("b.buildingName = :names",{names:name})
@@ -108,5 +116,39 @@ export class FacilitiesService {
         console.log(building);
         
         return building
+    }
+
+    async postFacilities(facilitiesDto : FacilitiesCreateDto,filepath:string){
+        return await this.dataSource.transaction(async manager=>{
+            const facilitiesTRepository =  manager.getRepository<Facilities>(Facilities);
+            const buildingTRepository = manager.getRepository<Building>(Building)
+            const userTRepository = manager.getRepository<User>(User);
+            const user = await userTRepository.findOneBy({userId:1})
+            if(!user){
+                throw new NotFoundException("User not found")
+            }
+            const building = await buildingTRepository.findOneBy({buildingName:facilitiesDto.building[0]})
+            if(!building){
+                throw new NotFoundException("Building not found")
+            }
+            console.log(building);
+            
+            const facil = await facilitiesTRepository.create({
+                facilitiesName:facilitiesDto.facilitiesName,
+                ticketNum:`${facilitiesDto.facilitiesName}${uuid4()}`,
+                description:facilitiesDto.description,
+                building:building,
+                imgPath:filepath,
+                createdby:user    
+            })
+
+            const saveFacil = await facilitiesTRepository.save(facil)
+            return saveFacil;
+
+        })
+        
+        
+        
+        
     }
 }

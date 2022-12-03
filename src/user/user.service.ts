@@ -1,3 +1,4 @@
+import { Role } from './../role/role.enum';
 import { UserLoginDto } from './../auth/dto/user-login.dto';
 import { userCreateDto } from './dto/user-create.dto';
 import { User } from './../entities/user.entity';
@@ -34,6 +35,12 @@ export class UserService {
             if(exist){
                 throw new BadRequestException("User already exist");
             }
+            const numExist = await userTRepository.findOneBy({
+                userNumber:userDto.userNumber
+            })
+            if(numExist){
+                throw new BadRequestException(`User with UserNumber ${userDto.userNumber} already exist`)
+            }
            
             if(userDto.password!=userDto.password_confirmation){
                 throw new BadRequestException("Password doesnt matches");
@@ -46,8 +53,10 @@ export class UserService {
                 userNumber:userDto.userNumber,
                 fullName:userDto.fullName,
                 phoneNum:userDto.phoneNumber,
+                role:userDto.role
             })
             const newUser = await userTRepository.save(newUserCreate)
+            delete newUser.password
             return newUser
         })
     }

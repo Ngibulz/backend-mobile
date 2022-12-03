@@ -3,5 +3,4 @@ export enum BuidlingEnum {
     b = 'b',
     c = 'c',
     d = 'd'
-
 }

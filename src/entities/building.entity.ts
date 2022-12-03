@@ -14,9 +14,8 @@ export class Building{
         type:'enum',
         enum : BuidlingEnum,
         default :BuidlingEnum.a,
-        unique:true
     })
-    public buildingName : Building[];
+    public buildingName : BuidlingEnum[];
 
     @OneToMany(()=>Facilities,facilities=>facilities.building,{cascade:['insert','update']})
     facilities:Facilities[];
