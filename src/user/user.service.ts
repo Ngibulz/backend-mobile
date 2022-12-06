@@ -53,7 +53,8 @@ export class UserService {
                 userNumber:userDto.userNumber,
                 fullName:userDto.fullName,
                 phoneNum:userDto.phoneNumber,
-                role:userDto.role
+                //role:userDto.role,
+                department:userDto.department,
             })
             const newUser = await userTRepository.save(newUserCreate)
             delete newUser.password
@@ -101,5 +102,13 @@ export class UserService {
 
     //     return updated.affected > 0;
     // }
+
+    async getUserByEmail(emailUser : string){
+        const usr =  await this.userRepository.findOneBy({
+            email:emailUser
+        })
+        return usr
+    }
+
 
 }

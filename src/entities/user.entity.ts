@@ -33,6 +33,9 @@ export class User{
     })
     public role : Role[];
 
+    @Column({nullable:false,default:"other"})
+    department : string;
+
     @OneToMany(()=>Facilities, facilities=>facilities.createdby,{cascade:['insert','update']})
     facilitesCreate : Facilities[];
 }   

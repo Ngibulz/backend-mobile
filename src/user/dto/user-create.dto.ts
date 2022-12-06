@@ -35,9 +35,13 @@ export class userCreateDto{
     @Match('password')
     password_confirmation: string;
 
+    // @IsNotEmpty()
+    // @IsEnum(Role)
+    // role : Role[];
+
     @IsNotEmpty()
-    @IsEnum(Role)
-    role : Role[]
+    @IsString()
+    department : string;
 
 
 }

@@ -13,6 +13,6 @@ export class UserLoginDto {
     @IsNotEmpty({message:"Password is required"})
     password: string;
 
-    @IsBoolean()
+    //@IsBoolean()
     remember : boolean;
 }

@@ -1,3 +1,4 @@
+import { use } from 'passport';
 import { uuid4 } from '@sentry/utils';
 import { BuidlingEnum } from './../role/building.enum';
 import { Role } from 'src/role/role.enum';
@@ -118,12 +119,12 @@ export class FacilitiesService {
         return building
     }
 
-    async postFacilities(facilitiesDto : FacilitiesCreateDto,filepath:string){
+    async postFacilities(facilitiesDto : FacilitiesCreateDto,filepath:string,userid:number){
         return await this.dataSource.transaction(async manager=>{
             const facilitiesTRepository =  manager.getRepository<Facilities>(Facilities);
             const buildingTRepository = manager.getRepository<Building>(Building)
             const userTRepository = manager.getRepository<User>(User);
-            const user = await userTRepository.findOneBy({userId:1})
+            const user = await userTRepository.findOneBy({userId:userid})
             if(!user){
                 throw new NotFoundException("User not found")
             }
@@ -145,10 +146,23 @@ export class FacilitiesService {
             const saveFacil = await facilitiesTRepository.save(facil)
             return saveFacil;
 
-        })
-        
-        
-        
-        
+        }) 
     }
+
+    async completeReport(faciltiesId:number){
+        return await this.dataSource.transaction(async manager=>{
+            const facilitiesTRepository =  manager.getRepository<Facilities>(Facilities);
+            const facilToUpdate = await facilitiesTRepository.findOneBy({
+                facilitiesId:faciltiesId
+            })
+            if(facilToUpdate.status!=0){
+                throw new BadRequestException("Report status invalid, must be pending")
+            }
+            await facilitiesTRepository.update(facilToUpdate.facilitiesId,{
+                status:1
+            })
+            return "OK";
+        })
+    }
+
 }
