@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "@sentry/node": "^7.23.0",
+    "@sentry/tracing": "^7.24.1",
     "@sentry/utils": "^7.23.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",

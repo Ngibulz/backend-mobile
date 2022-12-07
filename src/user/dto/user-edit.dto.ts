@@ -14,26 +14,13 @@ export class userCreateDto{
     fullName : string;
 
     @IsNotEmpty()
-    @IsString()
-    userNumber : string;
+    @IsNumber()
+    userNumber : number;
 
     @IsNotEmpty()
     @IsString()
     phoneNumber : string
 
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(8)
-    @MaxLength(32)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { each: true })
-    password : string;
-
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(8)
-    @MaxLength(32)
-    @Match('password')
-    password_confirmation: string;
 
     // @IsNotEmpty()
     // @IsEnum(Role)

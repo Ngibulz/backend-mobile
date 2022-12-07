@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common/exceptions';
 import { Role } from './../role/role.enum';
 import { UserLoginDto } from './../auth/dto/user-login.dto';
 import { userCreateDto } from './dto/user-create.dto';
@@ -107,7 +108,14 @@ export class UserService {
         const usr =  await this.userRepository.findOneBy({
             email:emailUser
         })
+        if(!usr){
+            throw new NotFoundException("No user found")
+        }
         return usr
+    }
+
+    async editProfile(){
+        
     }
 
 

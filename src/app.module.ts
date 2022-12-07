@@ -1,7 +1,8 @@
+import { UserLoggerMiddleware } from './middleware/user-logger.middleware';
 import { FacilitiesModule } from './facilities/facilities.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
@@ -34,4 +35,7 @@ import { ConfigModule } from '@nestjs/config';
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UserLoggerMiddleware).forRoutes('*');
+  }
 }

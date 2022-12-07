@@ -105,6 +105,4 @@ export class FacilitiesController {
     async updateFacilStatusById(@Param('id') id:number){
         return this.facilitiesService.completeReport(id);
     }
-
-
 }

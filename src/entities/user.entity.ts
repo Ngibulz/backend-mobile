@@ -23,8 +23,8 @@ export class User{
     @Column({ nullable: false })
     password: string;
 
-    @Column({nullable:false, unique:true})
-    userNumber : number // NIM / NID / NIStaff
+    @Column({nullable:true, unique:false})
+    userNumber : string // NIM / NID / NIStaff
 
     @Column({
         type:'enum',
