@@ -8,6 +8,7 @@ import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { AliOssHelperModule } from './ali-oss/ali-oss.module';
 
 @Module({
   imports: [
@@ -24,11 +25,19 @@ import { ConfigModule } from '@nestjs/config';
         entities: [
           __dirname + '/entities/*.entity{.ts,.js}'
         ],
+        migrations: [
+          __dirname + '/migrations/*{.ts,.js}'
+         ],
+        migrationsRun:true,
+        migrationsTableName: "migrations_typeorm",
         synchronize: true,
+        
     }),
     UserModule,
     AuthModule,
     FacilitiesModule,
+    AliOssHelperModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

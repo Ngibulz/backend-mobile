@@ -13,7 +13,7 @@ export class Building{
     @Column({
         type:'enum',
         enum : BuidlingEnum,
-        default :BuidlingEnum.a,
+        unique:true
     })
     public buildingName : BuidlingEnum[];
 

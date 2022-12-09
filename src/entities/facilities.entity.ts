@@ -27,8 +27,8 @@ export class Facilities{
      * 0 = pending
      * 1 = done repair
      */
-    @Column({type:"tinyint",nullable:false,default:0})
-    status : number;
+    @Column({nullable:false,default:"pending"})
+    status : string;
 
     @CreateDateColumn()
     created_at: Date;
@@ -36,11 +36,17 @@ export class Facilities{
     @UpdateDateColumn()
     updated_at: Date;
 
+    @Column({type:"date",nullable:true})
+    createdDate : string;
+
+    @Column({type:"date",nullable:true})
+    updatedDate : string;
+
     @ManyToOne(()=>User, user=>user.facilitesCreate)
     @JoinColumn({name:'createdBy'})
     createdby : User
 
-    @ManyToOne(()=>Building,building=>building.facilities,{cascade:['insert','update']})
+    @ManyToOne(()=>Building,building=>building.facilities,{cascade:['insert','update'],eager:true})
     @JoinColumn({name:'building'})
     building:Building;
 

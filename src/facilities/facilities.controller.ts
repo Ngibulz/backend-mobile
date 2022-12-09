@@ -1,3 +1,5 @@
+import { BuidlingEnum } from './../role/building.enum';
+import { Building } from './../entities/building.entity';
 import { AuthGuard } from '@nestjs/passport';
 
 import { extname } from 'path';
@@ -19,7 +21,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import multer, { diskStorage } from 'multer';
 import * as path from 'path';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { Request } from 'express';
+import {  Request } from 'express';
+import { FacilitiesCreate64Dto } from './dto/facilities-create-base64 copy';
 
 @Controller('facilities')
 export class FacilitiesController {
@@ -28,15 +31,19 @@ export class FacilitiesController {
         ) { }
 
     @Get('getAllFacilities')
-    @Roles(Role.User)
-    @UseGuards(RolesGuard)
+    // @Roles(Role.User)
+    // @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
     async getAllFacilities(@GetUser() getuser:User,@Req() req:Request){
         console.log(getuser.userId);
         console.log(getuser.email);
         console.log(req.headers);
+        console.log();
+        const facils = await this.facilitiesService.getAllFacilities()
+        console.log(facils);
         
-        return this.facilitiesService.getAllFacilities()
+        return facils
+
     }
 
     @Get('getAllBuildingWithFacil')
@@ -65,37 +72,32 @@ export class FacilitiesController {
         
     }
 
-    @Post('postFacilities')
+    @Post('postFacilitiesLegacy')
     @UsePipes(new ValidationPipe)
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(
         FileInterceptor("uploadfacil",{
             fileFilter:imageFileFilter,
-            storage:diskStorage({
-                destination:path.join(__dirname,"..","img"),
-                filename: (req: any, file: any, cb: any) => {
-                    // Calling the callback passing the random name generated with the original extension name
-                    cb(null, `${uuid4()}${extname(file.originalname)}`);
-                }
-            }),
         })
     )
     async postFacility(
         @Body() facilitiesDto:FacilitiesCreateDto,
         @UploadedFile() uploadfacil:Express.Multer.File,
-        @GetUser() getuser):Promise<any>{
+        @GetUser() getuser,
+        @Req() req:Request):Promise<any>{
+        console.log(req.headers['content-type']);
+        
             if(!uploadfacil){
                 throw new BadRequestException('You must upload file')
             }
         console.log(path.join(__dirname,"..","img"));
-        console.log(uploadfacil.filename);
-        console.log(uploadfacil.path)
-        console.log(uploadfacil.destination);
-        console.log(getuser.userId);
-        
-        
-        
-        return this.facilitiesService.postFacilities(facilitiesDto,uploadfacil.filename,getuser.userId)
+        console.log(uploadfacil)
+        console.log(uploadfacil.buffer);
+
+        let facilpost = await  this.facilitiesService.postFacilities(facilitiesDto,getuser.userId,uploadfacil)
+        // delete facilpost.building,
+        // delete facilpost.imgPath;
+        return facilpost;
     }
 
     @Put("updateStatus/:id")
@@ -104,5 +106,38 @@ export class FacilitiesController {
     @UseGuards(JwtAuthGuard)
     async updateFacilStatusById(@Param('id') id:number){
         return this.facilitiesService.completeReport(id);
+    }
+
+    @Put("updateStatusDone/:id")
+    @Roles(Role.Admin)
+    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
+    async updateFacilStatusByIdtoDone(@Param('id') id:number){
+        return this.facilitiesService.completeReportDone(id);
+    }
+
+
+    @Get("count/:name")
+    async getcount(@Param('name') names:string){
+        return this.facilitiesService.getFacilCountPerBuilding(names);
+    }
+
+
+    @Post('postFacilities')
+    @UsePipes(new ValidationPipe)
+    @UseGuards(JwtAuthGuard)
+    async postFacility64(
+        @Body() facilitiesDto:FacilitiesCreate64Dto,
+        @GetUser() getuser,
+        @Req() req:Request):Promise<any>{
+        console.log(req.headers['content-type']);
+
+        return this.facilitiesService.postFacilitiesBase64(facilitiesDto,getuser.userId)
+    }
+
+    @Get('getFacil/:id')
+    @UseGuards(JwtAuthGuard)
+    async getFacilById(@Param('id') id:number){
+        return this.facilitiesService.getSpecificFacilId(id)
     }
 }

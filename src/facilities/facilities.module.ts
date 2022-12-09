@@ -1,3 +1,4 @@
+import { AliOssHelperModule } from './../ali-oss/ali-oss.module';
 import { FacilitiesService } from './facilities.service';
 import { FacilitiesController } from './facilities.controller';
 import { Building } from './../entities/building.entity';
@@ -5,7 +6,7 @@ import { Facilities } from './../entities/facilities.entity';
 
 import { User } from './../entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 
 @Module({
     imports: [
@@ -14,6 +15,8 @@ import { Module } from "@nestjs/common";
         Facilities,
         Building,
       ]),
+      forwardRef(()=>AliOssHelperModule),
+
   
     ],
     controllers: [FacilitiesController],
