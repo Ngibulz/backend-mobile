@@ -46,6 +46,9 @@ export class FacilitiesService {
             "f.updatedDate",
             "b.buildingId",
             "b.buildingName",
+            "u.userId",
+            "u.fullName",
+            "u.email"
         ])
         .getMany()
 
@@ -90,20 +93,19 @@ export class FacilitiesService {
     }
 
     async getBuidlingWithFacilWhere(name : string){
-        const building = await this.buildingRepository
-        .createQueryBuilder('b')
-        .leftJoin('b.facilities','f')
+        const building = await this.facilitiesRepository
+        .createQueryBuilder('f')
+        .leftJoin('f.building','b')
         .select([
-            "b.buildingId",
-            "b.buildingName",
             "f.facilitiesId",
             "f.facilitiesName",
             "f.status",
             "f.description",
             "f.ticketNum",
-            "f.imgPath",
             "f.createdDate",
-            "f.updatedDate"
+            "f.updatedDate",
+            "b.buildingId",
+            "b.buildingName",
         ])
         .where("b.buildingName = :names",{names:name})
         .getMany()
@@ -266,6 +268,7 @@ export class FacilitiesService {
         const building = await this.facilitiesRepository
         .createQueryBuilder('f')
         .leftJoin('f.building','b')
+        .leftJoin('f.createdby','u')
         .select([
             "f.facilitiesId",
             "f.facilitiesName",
@@ -276,7 +279,10 @@ export class FacilitiesService {
             "f.createdDate",
             "f.updatedDate",
             "b.buildingId",
-            "b.buildingName"
+            "b.buildingName",
+            "u.userId",
+            "u.fullName",
+            "u.email"
         ])
         .where("f.facilitiesId =:fid",{fid:id})
         .getOne()
