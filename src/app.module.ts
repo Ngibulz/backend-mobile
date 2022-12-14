@@ -33,9 +33,9 @@ import { AliOssHelperModule } from './ali-oss/ali-oss.module';
           __dirname + '/migrations/*{.ts,.js}'
          ],
         autoLoadEntities:true,
-        migrationsRun:false,
+        migrationsRun:true,
         migrationsTableName: "migrations_typeorm",
-        synchronize: true,
+        synchronize: false,
       })
     }),
     UserModule,
