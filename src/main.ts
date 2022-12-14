@@ -18,6 +18,5 @@ async function bootstrap() {
   })
   app.useGlobalFilters(new UnauthorizedExceptionFilter);
   app.useGlobalFilters(new ForbiddenExceptionFilter);
-  await app.listen(80);
-}
+  await app.listen(process.env.PORT || 80)}
 bootstrap();
