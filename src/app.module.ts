@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config/dist';
 import { UserLoggerMiddleware } from './middleware/user-logger.middleware';
 import { FacilitiesModule } from './facilities/facilities.module';
 import { AuthModule } from './auth/auth.module';
@@ -15,23 +16,27 @@ import { AliOssHelperModule } from './ali-oss/ali-oss.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
-        host: 'localhost',
+        host: configService.get('DB_HOST', 'localhost'),
         port: 3306,
-        username: 'root',
-        password: '',
-        database: 'backendmobile',
+        username: configService.get('DB_USERNAME', 'root'),
+        password: configService.get('DB_PASSWORD', ''),
+        database: configService.get('DB_NAME', 'backendmobile'),
         entities: [
           __dirname + '/entities/*.entity{.ts,.js}'
         ],
-        migrations: [
+        migrations:[
           __dirname + '/migrations/*{.ts,.js}'
          ],
-        migrationsRun:true,
+        autoLoadEntities:true,
+        migrationsRun:false,
         migrationsTableName: "migrations_typeorm",
         synchronize: true,
-        
+      })
     }),
     UserModule,
     AuthModule,
