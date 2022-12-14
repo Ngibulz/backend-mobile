@@ -116,23 +116,53 @@ export class FacilitiesService {
         return building
     }
 
-    async getBuidlingWithFacilWhere(name : string){
-        const building = await this.facilitiesRepository
-        .createQueryBuilder('f')
-        .leftJoin('f.building','b')
-        .select([
-            "f.facilitiesId",
-            "f.facilitiesName",
-            "f.status",
-            "f.description",
-            "f.ticketNum",
-            "f.createdDate",
-            "f.updatedDate",
-            "b.buildingId",
-            "b.buildingName",
-        ])
-        .where("b.buildingName = :names",{names:name})
-        .getMany()
+    async getBuidlingWithFacilWhere(name : string,email:string,role:string){
+        let building;
+        if(role==Role.Admin){
+            building = await this.facilitiesRepository
+            .createQueryBuilder('f')
+            .leftJoin('f.building','b')
+            .leftJoin("f.createdby","u")
+            .select([
+                "f.facilitiesId",
+                "f.facilitiesName",
+                "f.status",
+                "f.description",
+                "f.ticketNum",
+                "f.createdDate",
+                "f.updatedDate",
+                "b.buildingId",
+                "b.buildingName",
+                "u.userId",
+                "u.fullName",
+                "u.email"
+            ])
+            .andWhere("b.buildingName = :names",{names:name})
+            .getMany()
+        } else {
+            building = await this.facilitiesRepository
+            .createQueryBuilder('f')
+            .leftJoin('f.building','b')
+            .leftJoin("f.createdby","u")
+            .select([
+                "f.facilitiesId",
+                "f.facilitiesName",
+                "f.status",
+                "f.description",
+                "f.ticketNum",
+                "f.createdDate",
+                "f.updatedDate",
+                "b.buildingId",
+                "b.buildingName",
+                "u.userId",
+                "u.fullName",
+                "u.email"
+            ])
+            .where("u.email = :emails",{emails:email})
+            .andWhere("b.buildingName = :names",{names:name})
+            .getMany()
+        }
+
         return building
     }
 

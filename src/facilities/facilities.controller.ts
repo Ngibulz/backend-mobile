@@ -64,8 +64,13 @@ export class FacilitiesController {
 
     @Get('getFacilities/:buildingName')
     @UseGuards(JwtAuthGuard)
-    async getFacilByBuilding(@Param('buildingName') buildingId:string){
-        return this.facilitiesService.getBuidlingWithFacilWhere(buildingId);
+    async getFacilByBuilding(@GetUser() getuser:User,@Param('buildingName') buildingId:string){
+        console.log(getuser.userId);
+        console.log(getuser.email);
+        //console.log(getuser.role[0]);
+        let m:string = getuser.role.toString()
+        console.log(m);
+        return this.facilitiesService.getBuidlingWithFacilWhere(buildingId,getuser.email,m);
         
     }
 
