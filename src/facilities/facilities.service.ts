@@ -31,27 +31,50 @@ export class FacilitiesService {
     ) { }
 
 
-    async getAllFacilities(){
-        const facilities = await this.facilitiesRepository
-        .createQueryBuilder('f')
-        .leftJoin("f.createdby","u")
-        .leftJoin("f.building","b")
-        .select([
-            "f.facilitiesId",
-            "f.facilitiesName",
-            "f.status",
-            "f.description",
-            "f.ticketNum",
-            "f.createdDate",
-            "f.updatedDate",
-            "b.buildingId",
-            "b.buildingName",
-            "u.userId",
-            "u.fullName",
-            "u.email"
-        ])
-        .getMany()
-
+    async getAllFacilities(role:string,email:string){
+        let facilities;
+        if(role == Role.Admin){
+            facilities = await this.facilitiesRepository
+            .createQueryBuilder('f')
+            .leftJoin("f.createdby","u")
+            .leftJoin("f.building","b")
+            .select([
+                "f.facilitiesId",
+                "f.facilitiesName",
+                "f.status",
+                "f.description",
+                "f.ticketNum",
+                "f.createdDate",
+                "f.updatedDate",
+                "b.buildingId",
+                "b.buildingName",
+                "u.userId",
+                "u.fullName",
+                "u.email"
+            ])
+            .getMany()
+        } else {
+            facilities = await this.facilitiesRepository
+            .createQueryBuilder('f')
+            .leftJoin("f.createdby","u")
+            .leftJoin("f.building","b")
+            .select([
+                "f.facilitiesId",
+                "f.facilitiesName",
+                "f.status",
+                "f.description",
+                "f.ticketNum",
+                "f.createdDate",
+                "f.updatedDate",
+                "b.buildingId",
+                "b.buildingName",
+                "u.userId",
+                "u.fullName",
+                "u.email"
+            ])
+            .where("u.email = :emails",{emails:email})
+            .getMany()
+        }
         return facilities;
     }
 
@@ -87,6 +110,7 @@ export class FacilitiesService {
             // "f.ticketNum",
             "b.buildingId",
             "b.buildingName",
+            "b.description",
         ])
         .getMany()
         return building
@@ -289,5 +313,7 @@ export class FacilitiesService {
 
         return building
     }
+
+
 
 }

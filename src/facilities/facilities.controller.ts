@@ -37,10 +37,14 @@ export class FacilitiesController {
     async getAllFacilities(@GetUser() getuser:User,@Req() req:Request){
         console.log(getuser.userId);
         console.log(getuser.email);
+        console.log(getuser.role[0]);
+        let m:string = getuser.role.toString()
+        console.log(m);
+        
         console.log(req.headers);
         console.log();
-        const facils = await this.facilitiesService.getAllFacilities()
-        console.log(facils);
+        const facils = await this.facilitiesService.getAllFacilities(m,getuser.email)
+        //console.log(facils);
         
         return facils
 

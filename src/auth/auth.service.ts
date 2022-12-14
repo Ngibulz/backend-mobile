@@ -21,7 +21,7 @@ export class AuthService {
         async signIn(loginDto: UserLoginDto): Promise<Object> {
 
             const user = await this.userService.signIn(loginDto)
-            const accesstoken :string  = this.getJwtAccessToken(user.email,user.role,loginDto.remember,user.userId,user.fullName,user.phoneNum,user.department);
+            const accesstoken :string  = this.getJwtAccessToken(user.email,user.role,loginDto.remember,user.userId,user.fullName,user.phoneNum,user.department,user.userNumber);
             const jwt: any = this.decodeJwtAccessToken(accesstoken);
             delete user.password;
             return { user, accesstoken }
@@ -34,9 +34,10 @@ export class AuthService {
             userId : number,
             fullname:string,
             phoneNum:string,
-            department:string)
+            department:string,
+            userNumber:string)
             {
-            const payload: IJWTPayload = { email,role,userId,fullname,phoneNum,department};
+            const payload: IJWTPayload = { email,role,userId,fullname,phoneNum,department,userNumber};
             let token
             if(remember == true){ token = this.jwtService.sign(payload ,{expiresIn:"7d"})}
             else{ token = this.jwtService.sign(payload,{expiresIn:"2h"});}

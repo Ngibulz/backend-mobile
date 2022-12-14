@@ -17,6 +17,9 @@ export class Building{
     })
     public buildingName : BuidlingEnum[];
 
+    @Column({default:"Lorem ipsum dolor simi aber au mama AA android tugass"})
+    description : string;
+
     @OneToMany(()=>Facilities,facilities=>facilities.building,{cascade:['insert','update']})
     facilities:Facilities[];
 }

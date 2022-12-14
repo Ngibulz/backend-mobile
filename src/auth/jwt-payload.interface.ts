@@ -6,5 +6,6 @@ export interface IJWTPayload {
     email: string;
     role: Role[];
     phoneNum:string;
-    department:string
+    department:string,
+    userNumber:string,
 }
