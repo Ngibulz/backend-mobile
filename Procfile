@@ -1,1 +1,1 @@
-web: yarn start run:prod
+web: yarn start run
