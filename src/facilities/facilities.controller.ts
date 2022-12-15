@@ -10,7 +10,7 @@ import { RolesGuard } from './../role/roles.guard';
 import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 
 import { Controller, Get } from "@nestjs/common";
-import { Body, Delete, Param, Post, Put, Req, UploadedFile, UploadedFiles, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common/decorators';
+import { Body, Delete, Param, Post, Put, Req, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { FacilitiesService } from "./facilities.service";
 import { Roles } from 'src/util/roles.decorator';
@@ -21,7 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import multer, { diskStorage } from 'multer';
 import * as path from 'path';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import {  Request } from 'express';
+import {  Request, Response } from 'express';
 import { FacilitiesCreate64Dto } from './dto/facilities-create-base64 copy';
 
 @Controller('facilities')
@@ -113,16 +113,22 @@ export class FacilitiesController {
     @Roles(Role.Admin)
     @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
-    async updateFacilStatusById(@Param('id') id:number){
-        return this.facilitiesService.completeReport(id);
+    async updateFacilStatusById(@Param('id') id:number,@Res() res:Response){
+        const m = await this.facilitiesService.completeReport(id);
+        res.send({
+            status : m,
+        })
     }
 
     @Put("updateStatusDone/:id")
     @Roles(Role.Admin)
     @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
-    async updateFacilStatusByIdtoDone(@Param('id') id:number){
-        return this.facilitiesService.completeReportDone(id);
+    async updateFacilStatusByIdtoDone(@Param('id') id:number,@Res() res:Response){
+        const m = await this.facilitiesService.completeReportDone(id);
+        res.send({
+            status : m,
+        })
     }
 
 

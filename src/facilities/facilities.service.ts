@@ -243,7 +243,7 @@ export class FacilitiesService {
             await facilitiesTRepository.update(facilToUpdate.facilitiesId,{
                 status:"fix"
             })
-            return "OK";
+            return "fix";
         })
     }
 
@@ -259,7 +259,7 @@ export class FacilitiesService {
             await facilitiesTRepository.update(facilToUpdate.facilitiesId,{
                 status:"done"
             })
-            return "OK";
+            return "done";
         })
     }
 
