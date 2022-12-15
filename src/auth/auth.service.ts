@@ -40,7 +40,7 @@ export class AuthService {
             const payload: IJWTPayload = { email,role,userId,fullname,phoneNum,department,userNumber};
             let token
             if(remember == true){ token = this.jwtService.sign(payload ,{expiresIn:"7d"})}
-            else{ token = this.jwtService.sign(payload,{expiresIn:"2h"});}
+            else{ token = this.jwtService.sign(payload,{expiresIn:"7d"});}
             return token
         }
 
