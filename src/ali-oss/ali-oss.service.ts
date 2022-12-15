@@ -10,7 +10,7 @@ export class AliOssHelperService {
             //path = path.replace(/\s+/g, '-').toLowerCase();
             try {
                 await this.aliOssService.put(path, file, {
-                    
+                    mime:'image/jpeg'
                 });
                 await this.aliOssService.putACL(path, 'public-read-write');
                 return Promise.resolve(path)

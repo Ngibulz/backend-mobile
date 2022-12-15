@@ -298,8 +298,11 @@ export class FacilitiesService {
                 throw new NotFoundException("Building not found")
             }
             console.log(building);
+            // const ll = Buffer.from(facilitiesDto.uploadfacil,'base64');
+            // console.log(ll);
+            
             const filename = `a${uuid4()}-${facilitiesDto.facilitiesName}`
-            await this.ossService.saveFile(filename,Buffer.from(facilitiesDto.uploadfacil) )
+            await this.ossService.saveFile(filename,Buffer.from(facilitiesDto.uploadfacil,'base64') )
             const facil = await facilitiesTRepository.create({
                 facilitiesName:facilitiesDto.facilitiesName,
                 ticketNum:`${facilitiesDto.facilitiesName}${uuid4()}`,
@@ -310,7 +313,8 @@ export class FacilitiesService {
                 createdDate:  datenow,
                 updatedDate:datenow,  
             })
-
+            //console.log(filename);
+            //await fs.writeFileSync("new-path.jpg", ll);
             const saveFacil = await facilitiesTRepository.save(facil)
             delete saveFacil.imgPath
             delete saveFacil.createdby
