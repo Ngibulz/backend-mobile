@@ -153,6 +153,7 @@ export class FacilitiesController {
     @Delete('delete/:id')
     @Roles(Role.Admin)
     @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard)
     async deleteFacilById(@Param('id') id:number){
         return this.facilitiesService.deleteFacil(id)
     }
