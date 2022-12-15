@@ -234,6 +234,7 @@ export class FacilitiesService {
     async completeReport(faciltiesId:number){
         return await this.dataSource.transaction(async manager=>{
             const facilitiesTRepository =  manager.getRepository<Facilities>(Facilities);
+            const datenow = new Date().toLocaleDateString('en-CA');
             const facilToUpdate = await facilitiesTRepository.findOneBy({
                 facilitiesId:faciltiesId
             })
@@ -241,7 +242,8 @@ export class FacilitiesService {
                 throw new BadRequestException("Report status invalid, must be pending")
             }
             await facilitiesTRepository.update(facilToUpdate.facilitiesId,{
-                status:"fix"
+                status:"fix",
+                updatedDate:datenow
             })
             return "fix";
         })
@@ -250,6 +252,7 @@ export class FacilitiesService {
     async completeReportDone(faciltiesId:number){
         return await this.dataSource.transaction(async manager=>{
             const facilitiesTRepository =  manager.getRepository<Facilities>(Facilities);
+            const datenow = new Date().toLocaleDateString('en-CA');
             const facilToUpdate = await facilitiesTRepository.findOneBy({
                 facilitiesId:faciltiesId
             })
@@ -257,7 +260,8 @@ export class FacilitiesService {
                 throw new BadRequestException("Report status invalid, must be fix")
             }
             await facilitiesTRepository.update(facilToUpdate.facilitiesId,{
-                status:"done"
+                status:"done",
+                updatedDate:datenow
             })
             return "done";
         })
@@ -356,8 +360,11 @@ export class FacilitiesService {
         const deletes = await this.facilitiesRepository.findOneBy({
             facilitiesId:id
         })
+        if(deletes.status!=="pending"){
+            throw new BadRequestException("Cant delete facilities")
+        }
         await this.facilitiesRepository.remove(deletes)
-        return "OK "
+        return "deleted"
     }
 
 

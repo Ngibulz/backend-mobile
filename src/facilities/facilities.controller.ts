@@ -157,10 +157,13 @@ export class FacilitiesController {
     }
 
     @Delete('delete/:id')
-    @Roles(Role.Admin)
-    @UseGuards(RolesGuard)
+    //@Roles(Role.Admin)
+    //@UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
-    async deleteFacilById(@Param('id') id:number){
-        return this.facilitiesService.deleteFacil(id)
+    async deleteFacilById(@Param('id') id:number,@Res() res:Response){
+        const m =await this.facilitiesService.deleteFacil(id)
+        res.send({
+            "result":"deleted"
+        })
     }
 }
