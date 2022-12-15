@@ -10,7 +10,7 @@ import { RolesGuard } from './../role/roles.guard';
 import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 
 import { Controller, Get } from "@nestjs/common";
-import { Body, Param, Post, Put, Req, UploadedFile, UploadedFiles, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common/decorators';
+import { Body, Delete, Param, Post, Put, Req, UploadedFile, UploadedFiles, UseGuards, UseInterceptors, UsePipes } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { FacilitiesService } from "./facilities.service";
 import { Roles } from 'src/util/roles.decorator';
@@ -148,5 +148,12 @@ export class FacilitiesController {
     @UseGuards(JwtAuthGuard)
     async getFacilById(@Param('id') id:number){
         return this.facilitiesService.getSpecificFacilId(id)
+    }
+
+    @Delete('delete/:id')
+    @Roles(Role.Admin)
+    @UseGuards(RolesGuard)
+    async deleteFacilById(@Param('id') id:number){
+        return this.facilitiesService.deleteFacil(id)
     }
 }

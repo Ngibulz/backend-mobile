@@ -352,6 +352,14 @@ export class FacilitiesService {
         return building
     }
 
+    async deleteFacil(id:number){
+        const deletes = await this.facilitiesRepository.findOneBy({
+            facilitiesId:id
+        })
+        await this.facilitiesRepository.remove(deletes)
+        return "OK "
+    }
+
 
 
 }
