@@ -30,6 +30,5 @@ $ yarn run start:prod
 5. if there any error please contact with my student email or through group leader
   
 for API use this documentation by postman ( go to the USED API folder for API in used )
-[API DOCUMENTATION](https://documenter.getpostman.com/view/18050488/2s8YzL56u8)
+[API DOCUMENTATION](https://documenter.getpostman.com/view/18050488/2s8YzL56u8 )
   
-[I'm an inline-style link](https://www.google.com)
