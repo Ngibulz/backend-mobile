@@ -3,7 +3,10 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
+  
+##API Docs Link  
+[API DOCUMENTATION](https://documenter.getpostman.com/view/18050488/2s8YzL56u8 )
+  
 ## Installation
 
 ```bash
@@ -30,7 +33,5 @@ $ yarn run start:prod
 5. ifthere any error please contact with my student email or through group leader
   
   
-#API Docs Link  
-[API DOCUMENTATION](https://documenter.getpostman.com/view/18050488/2s8YzL56u8 )
-  [Nest](https://github.com/nestjs/nest)
+
   
