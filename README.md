@@ -23,11 +23,11 @@ $ yarn run start:dev
 $ yarn run start:prod
 
 #Step by step to use
-1. Install XAMPP then activate Apache and MYSQL
+1. Install XAMPP `then` activate Apache and MYSQL
 2. Configure the APACHE to run on port 8080 by editing httpd.conf file  otherwise this doesnt work
 3. open vscode on the folder and open terminal and run yarn install --force to override any dependency conflict
 4. after that use yarn run start
-5. if there any error please contact with my student email or through group leader
+5. `if` there any error please contact with my student email or through group leader
   
   
 #API Docs Link  
