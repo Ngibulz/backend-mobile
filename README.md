@@ -10,7 +10,7 @@
 ## Installation
 
 ```bash
-$ yarn install --force
+$ yarn install --production=false
 ```
 
 ## Running the app
