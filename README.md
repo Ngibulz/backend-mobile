@@ -31,6 +31,9 @@ $ yarn run start:prod
 3. open vscode on the folder and open terminal and run yarn install --force to override any dependency conflict
 4. after that use yarn run start
 5. ifthere any error please contact with my student email or through group leader
+
+-- host it on heroku, set up the env and there you go
+
   
   
 
